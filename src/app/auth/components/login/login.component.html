@@ -1,0 +1,33 @@
+<div class="login-background">
+  <div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card p-4 login-card">
+      <h2 class="text-center mb-4">Login Form</h2>
+      <div class="d-flex justify-content-between mb-3">
+        <button class="btn btn-login rounded-pill" (click)="login()" [disabled]="isLoading">
+          Login {{ isLoading ? '...' : '' }}
+        </button>
+        <button class="btn btn-outline-secondary rounded-pill" (click)="navigateToSignup()">Signup</button>
+      </div>
+      <form (ngSubmit)="login()" class="needs-validation" novalidate>
+        <div class="mb-3">
+          <input type="email" class="form-control p-2" placeholder="Email Address" [(ngModel)]="credentials.email" name="email" required>
+        </div>
+        <div class="mb-3">
+          <input type="password" class="form-control p-2" placeholder="Password" [(ngModel)]="credentials.password" name="password" required>
+        </div>
+        <div class="mb-3 text-end">
+          <a href="#" class="text-muted">Forgot password?</a>
+        </div>
+        @if (errorMessage) {
+          <div class="alert alert-danger" role="alert">{{ errorMessage }}</div>
+        }
+        <button type="submit" class="btn btn-login w-100 rounded-pill p-2 mb-3" [disabled]="isLoading">
+          Login {{ isLoading ? '...' : '' }}
+        </button>
+      </form>
+      <div class="text-center">
+        <a href="#" class="text-primary" (click)="navigateToSignup()">Not a member? Signup now</a>
+      </div>
+    </div>
+  </div>
+</div>

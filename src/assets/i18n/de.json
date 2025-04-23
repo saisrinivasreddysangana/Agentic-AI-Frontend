@@ -1,0 +1,11 @@
+{
+    "APP_TITLE": "Agentic-AI",
+    "LOGOUT": "Abmelden",
+    "CHATBOT_HEADER": "Agentic-AI Assistent",
+    "WELCOME_MESSAGE": "Willkommen zurück, Benutzer!",
+    "MOCK_RESPONSE": "Dies ist eine simulierte Antwort auf Ihre Anfrage. Backend-Integration ausstehend.",
+    "TYPE_MESSAGE": "Geben Sie hier eine neue Nachricht ein",
+    "MESSAGE_ERROR": "Die Nachricht muss mindestens 3 Zeichen lang sein.",
+    "NOT_LOGGED_IN": "Bitte <0>melden Sie sich an</0>, um zu chatten.",
+    "DASHBOARD_HEADING": "Willkommen im Lohnabrechnungssystem"
+  }

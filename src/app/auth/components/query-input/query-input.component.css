@@ -1,0 +1,94 @@
+.query-input-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .input-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-family: 'Arial', sans-serif;
+    transition: border-color 0.3s ease;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  }
+  
+  input.invalid {
+    border-color: #dc3545;
+  }
+  
+  button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover:not(:disabled) {
+    background-color: #0056b3;
+  }
+  
+  button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .send-icon {
+    color: white;
+    font-size: 1rem;
+  }
+  
+  .error-message {
+    color: #dc3545;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    text-align: center;
+  }
+  
+  .not-logged-in {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #333;
+  }
+  
+  .not-logged-in a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .not-logged-in a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 768px) {
+    input {
+      font-size: 0.85rem;
+    }
+  
+    button {
+      width: 32px;
+      height: 32px;
+    }
+  
+    .send-icon {
+      font-size: 0.9rem;
+    }
+  }

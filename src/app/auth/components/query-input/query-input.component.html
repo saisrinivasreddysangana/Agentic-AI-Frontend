@@ -1,0 +1,25 @@
+<div class="query-input-container" *ngIf="isLoggedIn; else notLoggedIn">
+    <form [formGroup]="queryForm" (ngSubmit)="onSubmit()" class="input-form">
+      <input
+        type="text"
+        formControlName="query"
+        [placeholder]="'TYPE_MESSAGE' | translate"
+        [class.invalid]="queryForm.get('query')?.invalid && queryForm.get('query')?.touched"
+      />
+      <button type="submit" [disabled]="queryForm.invalid || isSubmitting">
+        <span class="send-icon">➤</span>
+      </button>
+    </form>
+    <div
+      *ngIf="queryForm.get('query')?.invalid && queryForm.get('query')?.touched"
+      class="error-message"
+    >
+      {{ 'MESSAGE_ERROR' | translate }}
+    </div>
+  </div>
+  
+  <ng-template #notLoggedIn>
+    <div class="not-logged-in">
+      <p [innerHTML]="'NOT_LOGGED_IN' | translate"></p>
+    </div>
+  </ng-template>

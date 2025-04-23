@@ -1,0 +1,11 @@
+{
+    "APP_TITLE": "Agentic-AI",
+    "LOGOUT": "Cerrar sesión",
+    "CHATBOT_HEADER": "Asistente de Agentic-AI",
+    "WELCOME_MESSAGE": "¡Bienvenido de nuevo, usuario!",
+    "MOCK_RESPONSE": "Esta es una respuesta simulada a tu consulta. Integración con el backend pendiente.",
+    "TYPE_MESSAGE": "Escribe un nuevo mensaje aquí",
+    "MESSAGE_ERROR": "El mensaje debe tener al menos 3 caracteres.",
+    "NOT_LOGGED_IN": "Por favor, <0>inicia sesión</0> para chatear.",
+    "DASHBOARD_HEADING": "Bienvenido al Sistema de Gestión de Nóminas"
+  }

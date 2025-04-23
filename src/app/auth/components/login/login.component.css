@@ -1,0 +1,55 @@
+.login-background {
+  background: linear-gradient(180deg, #004d99, #0066cc);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+}
+
+.btn-login, .btn-signup {
+  background: linear-gradient(90deg, #004d99, #0066cc);
+  color: #fff;
+  border: none;
+  padding: 5px 20px;
+  transition: background 0.3s;
+}
+
+.btn-login:hover, .btn-signup:hover {
+  background: linear-gradient(90deg, #003d80, #0052a3);
+  color: #fff;
+}
+
+.btn-outline-secondary {
+  color: #000;
+  border-color: #ccc;
+  padding: 5px 20px;
+  transition: background 0.3s;
+}
+
+.btn-outline-secondary:hover {
+  background: #e9ecef;
+  color: #000;
+}
+
+.form-control {
+  border-radius: 10px;
+  border: 1px solid #ced4da;
+  padding: 10px;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #0066cc;
+}

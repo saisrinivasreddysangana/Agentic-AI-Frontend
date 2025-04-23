@@ -1,0 +1,11 @@
+{
+    "APP_TITLE": "Agentic-AI",
+    "LOGOUT": "Logout",
+    "CHATBOT_HEADER": "Agentic-AI Assistant",
+    "WELCOME_MESSAGE": "Welcome back, User!",
+    "MOCK_RESPONSE": "This is a mock response to your query. Backend integration pending.",
+    "TYPE_MESSAGE": "Type a new message here",
+    "MESSAGE_ERROR": "Message must be at least 3 characters long.",
+    "NOT_LOGGED_IN": "Please <0>log in</0> to chat.",
+    "DASHBOARD_HEADING": "Welcome to Payroll Management System"
+  }
