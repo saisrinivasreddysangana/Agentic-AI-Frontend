@@ -1,7 +1,7 @@
 <div class="app-container">
   <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4" *ngIf="authService.isLoggedIn()">
     <div class="container-fluid">
-      <a class="navbar-brand" (click)="false">{{ 'Agentic_AI' | translate }}</a>
+      <a class="navbar-brand" (click)="false">{{ 'Agentic-AI' | translate }}</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -16,11 +16,20 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <div class="navbar-nav ms-auto d-flex align-items-center">
           <app-language-switcher></app-language-switcher>
-          <a class="nav-link" (click)="logout()">{{ 'LOGOUT' | translate }}</a>
         </div>
       </div>
     </div>
   </nav>
+
+  <!-- Logout Button at Top-Right Corner -->
+  <button
+    class="logout-btn"
+    *ngIf="authService.isLoggedIn()"
+    (click)="logout()"
+  >
+    {{ 'LOGOUT' | translate }}
+  </button>
+
   <div class="content-container">
     <router-outlet></router-outlet>
   </div>
@@ -31,7 +40,7 @@
 
   <div class="chatbot-window" *ngIf="isChatbotOpen && authService.isLoggedIn()">
     <div class="chatbot-header">
-      <h3>{{ 'Agentic_AI Assistant' | translate }}</h3>
+      <p>{{ welcomeMessage }}</p>
       <button class="close-btn" (click)="toggleChatbot()">✖</button>
     </div>
     <div class="chatbot-body">
@@ -45,6 +54,22 @@
             <span class="timestamp">{{ message.timestamp | date:'shortTime' }}</span>
           </div>
         </div>
+      </div>
+      <!-- Suggested Questions -->
+      <div class="suggested-questions" *ngIf="messages.length === 1">
+        <p>{{ suggestedMessage }}</p>
+        <button class="suggestion-btn" (click)="onQuerySubmitted('What\'s new in the finance budget for this financial year?')">
+          What's new in the finance budget for this financial year?
+        </button>
+        <button class="suggestion-btn" (click)="onQuerySubmitted('How can I declare my investments?')">
+          How can I declare my investments?
+        </button>
+        <button class="suggestion-btn" (click)="onQuerySubmitted('Can I change my tax regime during fiscal year?')">
+          Can I change my tax regime during fiscal year?
+        </button>
+        <button class="suggestion-btn" (click)="onQuerySubmitted('Is there something else you are looking for?')">
+          Is there something else you are looking for?
+        </button>
       </div>
     </div>
     <div class="chatbot-footer">

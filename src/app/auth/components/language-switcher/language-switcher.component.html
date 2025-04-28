@@ -1,5 +1,5 @@
 <div class="language-switcher">
-    <select [(ngModel)]="selectedLanguage" (change)="switchLanguage(selectedLanguage)">
-      <option *ngFor="let lang of languages" [value]="lang.code">{{ lang.label }}</option>
-    </select>
-  </div>
+  <select [(ngModel)]="selectedLanguage" (ngModelChange)="switchLanguage($event)">
+    <option *ngFor="let lang of languages" [value]="lang.code">{{ lang.label }}</option>
+  </select>
+</div>

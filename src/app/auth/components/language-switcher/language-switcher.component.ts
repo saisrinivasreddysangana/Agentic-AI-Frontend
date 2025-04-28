@@ -17,13 +17,16 @@ export class LanguageSwitcherComponent implements OnInit {
   selectedLanguage: string;
 
   constructor(private translate: TranslateService) {
+    // Get the preferred language from localStorage or default to the browser language
+    const savedLanguage = localStorage.getItem('preferredLanguage');
     const browserLang = translate.getBrowserLang();
-    this.selectedLanguage = this.languages.some(lang => lang.code === browserLang) ? browserLang! : 'en';
+    
+    // Set selected language based on saved preference or browser language
+    this.selectedLanguage = savedLanguage || (this.languages.some(lang => lang.code === browserLang) ? browserLang! : 'en');
   }
 
   ngOnInit(): void {
     this.translate.use(this.selectedLanguage);
-    localStorage.setItem('preferredLanguage', this.selectedLanguage);
   }
 
   switchLanguage(language: string): void {

@@ -1,25 +1,48 @@
 <div class="query-input-container" *ngIf="isLoggedIn; else notLoggedIn">
-    <form [formGroup]="queryForm" (ngSubmit)="onSubmit()" class="input-form">
-      <input
-        type="text"
-        formControlName="query"
-        [placeholder]="'TYPE_MESSAGE' | translate"
-        [class.invalid]="queryForm.get('query')?.invalid && queryForm.get('query')?.touched"
-      />
-      <button type="submit" [disabled]="queryForm.invalid || isSubmitting">
-        <span class="send-icon">➤</span>
-      </button>
-    </form>
-    <div
-      *ngIf="queryForm.get('query')?.invalid && queryForm.get('query')?.touched"
-      class="error-message"
-    >
-      {{ 'MESSAGE_ERROR' | translate }}
+  <form [formGroup]="queryForm" (ngSubmit)="onSubmit()" class="input-form">
+    <input
+      type="text"
+      formControlName="query"
+      [placeholder]="'TYPE_MESSAGE' | translate"
+      [class.invalid]="queryForm.get('query')?.invalid && queryForm.get('query')?.touched"
+    />
+    <button type="submit" [disabled]="queryForm.invalid || isSubmitting">
+      <span class="send-icon">➤</span>
+    </button>
+  </form>
+  <div
+    *ngIf="queryForm.get('query')?.invalid && queryForm.get('query')?.touched"
+    class="error-message"
+  >
+    {{ 'MESSAGE_ERROR' | translate }}
+  </div>
+
+  <!-- Payroll Explanation Section -->
+  <div *ngIf="response">
+    <div *ngIf="response.explanation" class="payroll-explanation">
+      <h3>{{ 'PAYROLL_EXPLANATION' | translate }}</h3>
+      <p>{{ response.explanation }}</p>
+      <div *ngIf="response.reasons && response.reasons.length > 0">
+        <h4>{{ 'REASONS' | translate }}</h4>
+        <ul>
+          <li *ngFor="let reason of response.reasons">
+            <strong>{{ reason.type }}:</strong> {{ reason.label }} - {{ reason.delta }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Payslip Download Section -->
+    <div *ngIf="payslipUrl">
+      <a [href]="payslipUrl" download="payslip.pdf" class="download-link">
+        {{ 'DOWNLOAD_PAYSIP' | translate }}
+      </a>
     </div>
   </div>
-  
-  <ng-template #notLoggedIn>
-    <div class="not-logged-in">
-      <p [innerHTML]="'NOT_LOGGED_IN' | translate"></p>
-    </div>
-  </ng-template>
+</div>
+
+<ng-template #notLoggedIn>
+  <div class="not-logged-in">
+    <p [innerHTML]="'NOT_LOGGED_IN' | translate"></p>
+  </div>
+</ng-template>

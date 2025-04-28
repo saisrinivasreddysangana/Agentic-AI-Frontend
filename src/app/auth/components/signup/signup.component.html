@@ -18,9 +18,9 @@
         <div class="mb-3">
           <input type="password" class="form-control p-2" placeholder="Password" [(ngModel)]="user.password" name="password" required>
         </div>
-        @if (errorMessage) {
-          <div class="alert alert-danger" role="alert">{{ errorMessage }}</div>
-        }
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </div>
         <button type="submit" class="btn btn-signup w-100 rounded-pill p-2 mb-3" [disabled]="isLoading">
           Signup {{ isLoading ? '...' : '' }}
         </button>

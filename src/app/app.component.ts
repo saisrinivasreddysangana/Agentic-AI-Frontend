@@ -20,12 +20,20 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'Agentic-AI';
   isChatbotOpen = false;
   messages: ChatMessage[] = [];
+  welcomeMessage: string = '';
+  suggestedMessage: string = '';
   private langChangeSubscription: Subscription | undefined;
 
-  constructor(public authService: AuthService, public router: Router, private translate: TranslateService) {
+  constructor(
+    public authService: AuthService, 
+    public router: Router, 
+    private translate: TranslateService
+  ) {
     const savedLanguage = localStorage.getItem('preferredLanguage');
     if (savedLanguage) {
-      this.translate.use(savedLanguage);
+      this.translate.use(savedLanguage);  // Load previously selected language
+    } else {
+      this.translate.use('en');  // Default to English if no preference is saved
     }
   }
 
@@ -42,11 +50,12 @@ export class AppComponent implements OnInit, OnDestroy {
     this.langChangeSubscription = this.translate.onLangChange.subscribe(() => {
       // Update existing messages when language changes
       this.updateMessages();
+      this.setWelcomeMessage();
     });
+    this.setWelcomeMessage();
   }
 
   ngOnDestroy() {
-    // Clean up subscription
     if (this.langChangeSubscription) {
       this.langChangeSubscription.unsubscribe();
     }
@@ -64,8 +73,18 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
+  setWelcomeMessage(): void {
+    const userName = 'Sai Srinivas Reddy Sangana'; // Replace with actual user name from AuthService if available
+    this.translate.get('', { userName }).subscribe((text: string) => {
+      this.welcomeMessage = text;
+    });
+    this.translate.get('SUGGESTED_MESSAGE').subscribe((text: string) => {
+      this.suggestedMessage = text;
+    });
+  }
+
   addWelcomeMessage(): void {
-    this.translate.get('WELCOME_MESSAGE').subscribe((text: string) => {
+    this.translate.get('WELCOME_MESSAGE', { userName: 'Sai Srinivas Reddy Sangana' }).subscribe((text: string) => {
       this.messages.push({
         sender: 'bot',
         text: text,
@@ -97,23 +116,28 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   updateMessages(): void {
-    // Re-translate all bot messages
     const updatedMessages: ChatMessage[] = [];
     this.messages.forEach(message => {
       if (message.sender === 'user') {
         updatedMessages.push(message); // User messages remain unchanged
       } else {
         // Re-translate bot messages
-        const key = message.text === this.translate.instant('WELCOME_MESSAGE') ? 'WELCOME_MESSAGE' : 'MOCK_RESPONSE';
-        this.translate.get(key).subscribe((text: string) => {
+        const key = message.text.includes('Hello') ? 'WELCOME_MESSAGE' : 'MOCK_RESPONSE';
+        this.translate.get(key, { userName: 'Sai Srinivas Reddy Sangana' }).subscribe((text: string) => {
           updatedMessages.push({
             sender: 'bot',
             text: text,
-            timestamp: message.timestamp
+            timestamp: message.timestamp,
           });
         });
       }
     });
     this.messages = updatedMessages;
+  }
+
+  // Method to change language
+  switchLanguage(language: string): void {
+    this.translate.use(language);
+    localStorage.setItem('preferredLanguage', language);  // Save the selected language in localStorage
   }
 }
