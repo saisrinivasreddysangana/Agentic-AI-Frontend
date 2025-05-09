@@ -1,7 +1,8 @@
+<!-- src/app/app.component.html -->
 <div class="app-container">
   <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4" *ngIf="authService.isLoggedIn()">
     <div class="container-fluid">
-      <a class="navbar-brand" (click)="false">{{ 'Agentic-AI' | translate }}</a>
+      <a class="navbar-brand" (click)="false">Agentic-AI</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -15,19 +16,14 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <div class="navbar-nav ms-auto d-flex align-items-center">
-          <app-language-switcher></app-language-switcher>
+          <!-- Removed app-language-switcher -->
         </div>
       </div>
     </div>
   </nav>
 
-  <!-- Logout Button at Top-Right Corner -->
-  <button
-    class="logout-btn"
-    *ngIf="authService.isLoggedIn()"
-    (click)="logout()"
-  >
-    {{ 'LOGOUT' | translate }}
+  <button class="logout-btn" *ngIf="authService.isLoggedIn()" (click)="logout()">
+    Logout
   </button>
 
   <div class="content-container">
@@ -40,7 +36,7 @@
 
   <div class="chatbot-window" *ngIf="isChatbotOpen && authService.isLoggedIn()">
     <div class="chatbot-header">
-      <p>{{ welcomeMessage }}</p>
+      <p>Chat with A.V.A.</p>
       <button class="close-btn" (click)="toggleChatbot()">✖</button>
     </div>
     <div class="chatbot-body">
@@ -51,23 +47,30 @@
           </span>
           <div class="message-content">
             <p>{{ message.text }}</p>
+            <ul class="reasons-list" *ngIf="message.response?.reasons && message.response.reasons.length > 0">
+              <li *ngFor="let reason of message.response.reasons">
+                <strong>{{ reason.type }}:</strong> {{ reason.label }} - {{ reason.delta }}
+              </li>
+            </ul>
+            <a *ngIf="message.payslipUrl" [href]="message.payslipUrl" download="payslip.pdf" class="payslip-link">
+              Download Payslip
+            </a>
             <span class="timestamp">{{ message.timestamp | date:'shortTime' }}</span>
           </div>
         </div>
       </div>
-      <!-- Suggested Questions -->
       <div class="suggested-questions" *ngIf="messages.length === 1">
         <p>{{ suggestedMessage }}</p>
-        <button class="suggestion-btn" (click)="onQuerySubmitted('What\'s new in the finance budget for this financial year?')">
-          What's new in the finance budget for this financial year?
+        <button class="suggestion-btn" (click)="onQuerySubmitted({ query: 'What\'s my year-to-date earnings?' })">
+          What's my year-to-date earnings?
         </button>
-        <button class="suggestion-btn" (click)="onQuerySubmitted('How can I declare my investments?')">
-          How can I declare my investments?
+        <button class="suggestion-btn" (click)="onQuerySubmitted({ query: 'Why did my pay drop last month?' })">
+          Why did my pay drop last month?
         </button>
-        <button class="suggestion-btn" (click)="onQuerySubmitted('Can I change my tax regime during fiscal year?')">
-          Can I change my tax regime during fiscal year?
+        <button class="suggestion-btn" (click)="onQuerySubmitted({ query: 'How much tax was withheld?' })">
+          How much tax was withheld?
         </button>
-        <button class="suggestion-btn" (click)="onQuerySubmitted('Is there something else you are looking for?')">
+        <button class="suggestion-btn" (click)="onQuerySubmitted({ query: 'Is there something else you are looking for?' })">
           Is there something else you are looking for?
         </button>
       </div>

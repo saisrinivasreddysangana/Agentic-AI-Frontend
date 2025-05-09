@@ -1,7 +1,8 @@
+// src/app/auth/service/auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -35,7 +36,7 @@ export class AuthService {
   }
 
   getProfile(): Observable<any> {
-    const token = this.tokenSubject.value;
+    const token = this.getToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get(`${this.apiUrl}/api/auth/profile`, { headers }).pipe(
       catchError(this.handleError)
@@ -43,12 +44,17 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.tokenSubject.value;
+    return !!this.getToken();
   }
 
   logout(): void {
     localStorage.removeItem('token');
     this.tokenSubject.next(null);
+  }
+
+  // Public method to get the current token
+  getToken(): string | null {
+    return this.tokenSubject.value;
   }
 
   private handleError(error: HttpErrorResponse) {

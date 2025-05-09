@@ -1,143 +1,140 @@
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './auth/service/auth.service';
-import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+
 
 interface ChatMessage {
   sender: 'bot' | 'user';
   text: string;
   timestamp: Date;
+  response?: any;
+  payslipUrl?: string;
 }
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
   standalone: false,
-  styleUrls: ['./app.component.scss']
+  
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'Agentic-AI';
   isChatbotOpen = false;
   messages: ChatMessage[] = [];
-  welcomeMessage: string = '';
-  suggestedMessage: string = '';
-  private langChangeSubscription: Subscription | undefined;
+  welcomeMessage = 'Hello, I’m A.V.A., your Virtual Assistant. I can help you with frequently asked questions related to payroll or tax.';
+  suggestedMessage = 'Here are some questions I was asked recently. You can choose from these or type your own question.';
+  private tokenSubscription: Subscription | undefined;
 
   constructor(
-    public authService: AuthService, 
-    public router: Router, 
-    private translate: TranslateService
-  ) {
-    const savedLanguage = localStorage.getItem('preferredLanguage');
-    if (savedLanguage) {
-      this.translate.use(savedLanguage);  // Load previously selected language
-    } else {
-      this.translate.use('en');  // Default to English if no preference is saved
-    }
-  }
+    public authService: AuthService,
+    public router: Router
+  ) {}
 
   ngOnInit() {
-    this.authService.token$.subscribe(token => {
+    this.tokenSubscription = this.authService.token$.subscribe(token => {
+      console.log('AppComponent: Token subscription update, token:', token ? 'present' : 'null');
       if (!token) {
         this.router.navigate(['/login']);
-      } else if (this.isChatbotOpen) {
+      } else if (this.isChatbotOpen && this.messages.length === 0) {
         this.addWelcomeMessage();
       }
     });
-
-    // Subscribe to language changes
-    this.langChangeSubscription = this.translate.onLangChange.subscribe(() => {
-      // Update existing messages when language changes
-      this.updateMessages();
-      this.setWelcomeMessage();
-    });
-    this.setWelcomeMessage();
   }
 
   ngOnDestroy() {
-    if (this.langChangeSubscription) {
-      this.langChangeSubscription.unsubscribe();
+    if (this.tokenSubscription) {
+      this.tokenSubscription.unsubscribe();
     }
   }
 
   logout(): void {
+    console.log('AppComponent: Logging out');
     this.authService.logout();
     this.router.navigate(['/login']);
   }
 
   toggleChatbot(): void {
     this.isChatbotOpen = !this.isChatbotOpen;
+    console.log('AppComponent: Chatbot toggled, open:', this.isChatbotOpen);
     if (this.isChatbotOpen && this.authService.isLoggedIn() && this.messages.length === 0) {
       this.addWelcomeMessage();
     }
   }
 
-  setWelcomeMessage(): void {
-    const userName = 'Sai Srinivas Reddy Sangana'; // Replace with actual user name from AuthService if available
-    this.translate.get('', { userName }).subscribe((text: string) => {
-      this.welcomeMessage = text;
-    });
-    this.translate.get('SUGGESTED_MESSAGE').subscribe((text: string) => {
-      this.suggestedMessage = text;
-    });
-  }
-
   addWelcomeMessage(): void {
-    this.translate.get('WELCOME_MESSAGE', { userName: 'Sai Srinivas Reddy Sangana' }).subscribe((text: string) => {
-      this.messages.push({
-        sender: 'bot',
-        text: text,
-        timestamp: new Date()
-      });
-    });
-  }
-
-  onQuerySubmitted(query: string): void {
+    console.log('AppComponent: Adding welcome message');
     this.messages.push({
-      sender: 'user',
-      text: query,
+      sender: 'bot',
+      text: this.welcomeMessage,
       timestamp: new Date()
     });
+  }
 
-    this.translate.get('MOCK_RESPONSE').subscribe((text: string) => {
-      setTimeout(() => {
-        this.messages.push({
-          sender: 'bot',
-          text: text,
-          timestamp: new Date()
+  onQuerySubmitted(event: { query: string, response?: any, payslipUrl?: string }): void {
+    console.log('AppComponent: Query submitted event received:', event);
+    if (event.query) {
+      this.messages.push({
+        sender: 'user',
+        text: event.query,
+        timestamp: new Date()
+      });
+    }
+
+    if (event.response) {
+      let responseText = event.response.explanation || 'An unexpected error occurred.';
+      if (event.response.reasons && event.response.reasons.length > 0) {
+        responseText += '\nReasons:\n';
+        event.response.reasons.forEach((reason: any) => {
+          responseText += `- ${reason.type}: ${reason.label} (${reason.delta})\n`;
         });
-        const chatBody = document.querySelector('.chatbot-body');
-        if (chatBody) {
-          chatBody.scrollTop = chatBody.scrollHeight;
-        }
-      }, 1000);
-    });
+      }
+      this.messages.push({
+        sender: 'bot',
+        text: responseText,
+        timestamp: new Date(),
+        response: event.response,
+        payslipUrl: event.payslipUrl
+      });
+    }
+
+    const chatBody = document.querySelector('.chatbot-body');
+    if (chatBody) {
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
   }
 
   updateMessages(): void {
+    console.log('AppComponent: Updating messages');
     const updatedMessages: ChatMessage[] = [];
     this.messages.forEach(message => {
       if (message.sender === 'user') {
-        updatedMessages.push(message); // User messages remain unchanged
-      } else {
-        // Re-translate bot messages
-        const key = message.text.includes('Hello') ? 'WELCOME_MESSAGE' : 'MOCK_RESPONSE';
-        this.translate.get(key, { userName: 'Sai Srinivas Reddy Sangana' }).subscribe((text: string) => {
-          updatedMessages.push({
-            sender: 'bot',
-            text: text,
-            timestamp: message.timestamp,
+        updatedMessages.push(message);
+      } else if (message.response) {
+        let responseText = message.response.explanation ? 'Payroll Explanation' : 'An unexpected error occurred.';
+        if (message.response.reasons && message.response.reasons.length > 0) {
+          responseText += '\nReasons:\n';
+          message.response.reasons.forEach((reason: any) => {
+            responseText += `- ${reason.type}: ${reason.label} (${reason.delta})\n`;
           });
+        }
+        updatedMessages.push({
+          sender: 'bot',
+          text: responseText,
+          timestamp: message.timestamp,
+          response: message.response,
+          payslipUrl: message.payslipUrl
+        });
+      } else {
+        updatedMessages.push({
+          sender: 'bot',
+          text: this.welcomeMessage,
+          timestamp: message.timestamp
         });
       }
     });
     this.messages = updatedMessages;
-  }
-
-  // Method to change language
-  switchLanguage(language: string): void {
-    this.translate.use(language);
-    localStorage.setItem('preferredLanguage', language);  // Save the selected language in localStorage
   }
 }

@@ -1,9 +1,10 @@
+<!-- src/app/auth/components/query-input/query-input.component.html -->
 <div class="query-input-container" *ngIf="isLoggedIn; else notLoggedIn">
   <form [formGroup]="queryForm" (ngSubmit)="onSubmit()" class="input-form">
     <input
       type="text"
       formControlName="query"
-      [placeholder]="'TYPE_MESSAGE' | translate"
+      placeholder="Type your question..."
       [class.invalid]="queryForm.get('query')?.invalid && queryForm.get('query')?.touched"
     />
     <button type="submit" [disabled]="queryForm.invalid || isSubmitting">
@@ -14,16 +15,16 @@
     *ngIf="queryForm.get('query')?.invalid && queryForm.get('query')?.touched"
     class="error-message"
   >
-    {{ 'MESSAGE_ERROR' | translate }}
+    Please enter a valid question (minimum 3 characters).
   </div>
 
   <!-- Payroll Explanation Section -->
   <div *ngIf="response">
     <div *ngIf="response.explanation" class="payroll-explanation">
-      <h3>{{ 'PAYROLL_EXPLANATION' | translate }}</h3>
+      <h3>Payroll Explanation</h3>
       <p>{{ response.explanation }}</p>
       <div *ngIf="response.reasons && response.reasons.length > 0">
-        <h4>{{ 'REASONS' | translate }}</h4>
+        <h4>Reasons</h4>
         <ul>
           <li *ngFor="let reason of response.reasons">
             <strong>{{ reason.type }}:</strong> {{ reason.label }} - {{ reason.delta }}
@@ -35,7 +36,7 @@
     <!-- Payslip Download Section -->
     <div *ngIf="payslipUrl">
       <a [href]="payslipUrl" download="payslip.pdf" class="download-link">
-        {{ 'DOWNLOAD_PAYSIP' | translate }}
+        Download Payslip
       </a>
     </div>
   </div>
@@ -43,6 +44,6 @@
 
 <ng-template #notLoggedIn>
   <div class="not-logged-in">
-    <p [innerHTML]="'NOT_LOGGED_IN' | translate"></p>
+    <p>You need to <a href="/login">log in</a> to ask questions.</p>
   </div>
 </ng-template>

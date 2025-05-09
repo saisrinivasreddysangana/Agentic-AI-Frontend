@@ -10,7 +10,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { QueryInputComponent } from './auth/components/query-input/query-input.component';
 import { DashboardComponent } from './auth/components/dashboard/dashboard.component';
-import { LanguageSwitcherComponent } from './auth/components/language-switcher/language-switcher.component';
+
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -20,8 +20,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     QueryInputComponent,
-    DashboardComponent,
-    LanguageSwitcherComponent
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -30,15 +29,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     AppRoutingModule,
     LoginComponent,
-    SignupComponent,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      },
-      defaultLanguage: 'en'
-    })
+    SignupComponent
   ],
   bootstrap: [AppComponent]
 })
